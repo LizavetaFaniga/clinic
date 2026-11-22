@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель{% endblock %}
+{% block content %}
+<h2>Панель администратора</h2>
+<form method="GET" class="filters">
+    <label>Фильтр по статусу: 
+        <select name="status" onchange="this.form.submit()">
+            <option value="">Все</option>
+            <option value="Новая" {% if status_filter == 'Новая' %}selected{% endif %}>Новая</option>
+            <option value="В обработке" {% if status_filter == 'В обработке' %}selected{% endif %}>В обработке</option>
+            <option value="Прием завершен" {% if status_filter == 'Прием завершен' %}selected{% endif %}>Прием завершен</option>
+        </select>
+    </label>
+</form>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr><th>#</th><th>Пациент</th><th>Врач</th><th>Дата</th><th>Статус</th><th>Действие</th></tr>
+        </thead>
+        <tbody>
+            {% for app in appointments %}
+            <tr>
+                <td>{{ app.id }}</td>
+                <td>{{ app.patient }}</td>
+                <td>{{ app.doctor }}</td>
+                <td>{{ app.appointment_date }}</td>
+                <td><span class="status-badge">{{ app.status }}</span></td>
+                <td>
+                    <form action="/admin/status/{{ app.id }}" method="POST" class="inline-form">
+                        <input type="hidden" name="current_filter" value="{{ status_filter }}">
+                        <input type="hidden" name="current_page" value="{{ page }}">
+                        <select name="status">
+                            <option value="Новая" {% if app.status == 'Новая' %}selected{% endif %}>Новая</option>
+                            <option value="В обработке" {% if app.status == 'В обработке' %}selected{% endif %}>В обработке</option>
+                            <option value="Прием завершен" {% if app.status == 'Прием завершен' %}selected{% endif %}>Прием завершен</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm">OK</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    {% if page > 1 %}
+        <a href="/admin?page={{ page-1 }}&status={{ status_filter }}">← Назад</a>
+    {% endif %}
+    <span>Стр. {{ page }}</span>
+    {% if appointments|length == 5 %}
+        <a href="/admin?page={{ page+1 }}&status={{ status_filter }}">Вперед →</a>
+    {% endif %}
+</div>
+{% endblock %}

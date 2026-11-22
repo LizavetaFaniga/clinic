@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+<h2>Личный кабинет</h2>
+<div class="grid-2">
+    <div>
+        <h3>Врачи клиники</h3>
+        {% for doc in doctors %}
+        <div class="card doctor-card">
+            <h4>{{ doc.full_name }}</h4>
+            <p class="muted">{{ doc.specialization }} · Каб. {{ doc.cabinet }}</p>
+            <form action="/book/{{ doc.id }}" method="POST" class="inline-form">
+                <input type="date" name="date" required>
+                <button type="submit" class="btn btn-sm">Записаться</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <h3>Мои записи</h3>
+        {% if not appointments %}<p class="muted">Записей пока нет.</p>{% endif %}
+        {% for app in appointments %}
+        <div class="card app-card status-border-{{ app.status|replace(' ', '-') }}">
+            <div class="app-header">
+                <b>{{ app.doctor_name }}</b>
+                <span class="status-badge">{{ app.status }}</span>
+            </div>
+            <p class="muted">{{ app.specialization }}</p>
+            <p>Дата: <b>{{ app.appointment_date }}</b></p>
+            
+            {% if app.status == 'Прием завершен' %}
+                {% if app.review_text %}
+                    <div class="review-box">{{ app.review_text }}</div>
+                {% else %}
+                    <form action="/review/{{ app.id }}" method="POST" style="margin-top: 10px;">
+                        <input type="text" name="review_text" placeholder="Оставьте отзыв о враче" required>
+                        <button type="submit" class="btn btn-sm">Отправить</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

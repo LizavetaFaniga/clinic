@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+<div class="auth-grid">
+    <div class="slider" id="slider">
+        <div class="slide active" style="background-image: url('{{ url_for('static', filename='media/et4xrvkqrloz1vg22hlyb6c8k8uf2vy0.jpg') }}');"></div>
+        <div class="slide" style="background-image: url('{{ url_for('static', filename='media/medical-logo-template_1283348-16465.jpg') }}');"></div>
+        <div class="slide" style="background-image: url('{{ url_for('static', filename='media/od6gzi5lj06n5lpdlew5y3rv1nkcb2vo.jpg') }}');"></div>
+        <div class="slide" style="background-image: url('{{ url_for('static', filename='media/udalenie-kondilom.png') }}');"></div>
+        <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
+    </div>
+    <div class="card">
+        <h2>Вход в систему</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" name="login" required>
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Войти</button>
+        </form>
+        <a href="/register" class="link">Нет аккаунта? Зарегистрируйтесь</a>
+    </div>
+</div>
+{% endblock %}
